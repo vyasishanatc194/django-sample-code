@@ -1,0 +1,31 @@
+{% load static %}
+
+<div>
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
+        <a href="/" class="navbar-brand">
+            <img src="logo.svg" height="28" alt="MyRoga">
+        </a>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav">
+                <a href="/" class="nav-item nav-link active">Home</a>
+                <a href="/category-upload/" class="nav-item nav-link">Category</a>
+                <a href="/product/aspect-upload/" class="nav-item nav-link">Product Aspects</a>
+                <a href="/product/upload/" class="nav-item nav-link">Products</a>
+                <a href="/product/aggregation-model-set/" class="nav-item nav-link">Aggregation Model Set</a>
+                <a href="/model-catalog/" class="nav-item nav-link">Model Catalog</a>
+                <a href="/logs/" class="nav-item nav-link">Logs</a>
+            </div>
+            <div class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
+                    <a href="/auth/logout/" class="nav-item nav-link">Logout</a>
+                {% else %}
+                    <a href="/auth/login/" class="nav-item nav-link">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+</div>

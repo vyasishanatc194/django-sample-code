@@ -1,0 +1,117 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div>
+    <div class="row">
+        <div class="row col-lg-12 col-md-12 col-sm-12">
+            <form action="{% url 'product:upload_product_aspects' %}" method="POST" enctype="multipart/form-data" class="row col-lg-8 col-md-8 col-sm-8"> 
+                {% csrf_token %}
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                    <label for="inputState">Upload Product Aspects(xls, xlsx):</label>
+                    <input type="file" name="upload_file" id="upload_file" required="True" class="form-control">
+                    {% if error %}
+                        <span class="error">{{ message }}</span>
+                    {% endif %}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 m-t-32">
+                    <button class="btn btn-success">
+                        <i class="fa fa-upload" aria-hidden="true"></i>&nbsp;
+                        Upload
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br /><br />
+    <div class="row">
+        <div class="row col-lg-12 col-md-12 col-sm-12">
+            <form action="{% url 'product:upload_product_aspects' %}" method="GET" class="row col-lg-6 col-md-6 col-sm-6"> 
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <label for="inputState">Select Category</label>
+                    <select id="inputState" class="form-control" name="category">
+                        <option value=""
+                            {% if selected_category == "" %}selected="selected"{% endif %}>
+                            Select Category
+                        </option>
+                        {% for category in categories %}
+                            <option value="{{category.id}}"
+                                {% if category == selected_category %}selected="selected"{% endif %}>
+                                {{ category.id }} - {{ category.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 m-t-32">
+                    <button class="btn btn-success">
+                        Submit
+                    </button>
+                </div>
+            </form>
+            <div class="col-lg-6 col-md-6 col-sm-6 m-t-32">
+                <a href="{% url 'product:upload_product_aspects' %}">
+                    <button class="btn btn-primary">
+                        Reset
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div>
+                <div class="current_status m-t-15">
+                    <div class="download-button">
+                        <a href="{% url 'product:download_product_aspects' %}?category_id={{selected_category.id}}">
+                            <button class="btn btn-warning"
+                                {% if not records %} disabled {%endif%}>
+                                <i class="fa fa-download" aria-hidden="true"></i>&nbsp;
+                                Download Product Aspect
+                            </button>
+                        </a>
+                    </div>
+                    <div>
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">AspectName</th>
+                                    <th class="text-center">Category</th>
+                                    <th class="text-center">Aspect MetaData Type</th>
+                                    <th class="text-center">Aspect MetaData Input Type</th>
+                                    <th class="text-center">Is Model Aspect</th>
+                                    <th class="text-center">Model Title Order</th>
+                                    <th class="text-center">Model Title Text Before Aspect</th>
+                                    <th class="text-center">Model Title Text After Aspect</th>
+                                    <th class="text-center">Updated At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if records %}
+                                    {% for record in records %}
+                                        <tr>
+                                            <td class="text-center">{{record.id}}</td>
+                                            <td class="text-center">{{record.name}}</td>
+                                            <td class="text-center">{{record.my_roga_category.name}}</td>
+                                            <td class="text-center">{{record.aspect_type}}</td>
+                                            <td class="text-center">{{record.aspect_input_type}}</td>
+                                            <td class="text-center">{{record.is_model_aspect}}</td>
+                                            <td class="text-center">{{record.model_title_order}}</td>
+                                            <td class="text-center">{{record.model_title_text_before_aspect}}</td>
+                                            <td class="text-center">{{record.model_title_text_after_aspect}}</td>
+                                            <td class="text-center">{{record.updated_at}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="11">No Data Available</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

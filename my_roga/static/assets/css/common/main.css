@@ -1,0 +1,89 @@
+body{
+    margin: 0px;
+}
+
+.error {
+    color: #dc3545;
+}
+
+.main-content {
+    margin-top: 8%;
+}
+
+.download-button {
+    margin-bottom: 1rem;
+    float: right;
+}
+
+.download-button a {
+    display: inline-block;
+    text-decoration: none;
+}
+
+
+.m-t-32 {
+    margin-top: 32px;
+}
+
+.ml-4 {
+    margin-left: -4rem !important;
+}
+
+.m-b-1 {
+    margin-bottom: 1rem;
+}
+
+.table-width {
+    width: 100%;
+    overflow: auto;
+    height: 550px;
+}
+
+/* START Login CSS */
+
+.form-signin {
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.form-signin .form-signin-heading .form-control {
+      position: relative;
+      font-size: 16px;
+      height: auto;
+      padding: 10px;
+}
+.form-signin .form-signin-heading input[type="text"] {
+      margin-bottom: -1px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+}
+.form-signin .form-signin-heading input[type="password"] {
+      margin-bottom: 20px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+}
+
+.login-form-center {
+    margin: auto;
+    width: 50%;
+}
+
+.errorlist li {
+    color: #dc3545;
+}
+
+/* END Login CSS */
+
+td.details-control {
+    background: url('../../imgs/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../../imgs/details_close.png') no-repeat center center;
+}
+
+.width-10 {
+    width: 10px;
+}

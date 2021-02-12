@@ -1,0 +1,77 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div>
+    <div class="row">
+        <div class="row col-lg-12 col-md-12 col-sm-12 m-b-1">
+            <form action="{% url 'home:logs' %}" method="GET" class="row col-lg-6 col-md-6 col-sm-6"> 
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <label for="inputState">Select Log Module</label>
+                    <select id="inputState" class="form-control" name="module">
+                        <option value=""
+                            {% if selected_module == "" %}selected="selected"{% endif %}>
+                            Select Log Module
+                        </option>
+                        {% for module in modules %}
+                            <option value="{{module.id}}"
+                                {% if module == selected_module %}selected="selected"{% endif %}>
+                                {{ module.id }} - {{ module.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 m-t-32">
+                    <button class="btn btn-success">
+                        Submit
+                    </button>
+                </div>
+            </form>
+            <div class="col-lg-6 col-md-6 col-sm-6 m-t-32">
+                <a href="{% url 'home:logs' %}">
+                    <button class="btn btn-primary">
+                        Reset
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div>
+                <div class="current_status m-t-15">
+                    <div class="table-width">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">Log Module</th>
+                                    <th class="text-center">Log Type</th>
+                                    <th class="text-center">Log Message</th>
+                                    <th class="text-center">Updated At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if records %}
+                                    {% for record in records %}
+                                        <tr>
+                                            <td class="text-center">{{record.id}}</td>
+                                            <td class="text-center">{{record.log_module.name}}</td>
+                                            <td class="text-center">{{record.get_log_type_display}}</td>
+                                            <td class="text-center">{{record.message}}</td>
+                                            <td class="text-center">{{record.updated_at}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5">No Data Available</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

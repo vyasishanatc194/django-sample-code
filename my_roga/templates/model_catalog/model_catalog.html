@@ -1,0 +1,172 @@
+{% extends 'index.html' %}
+{% load dict_key_with_spaces %}
+
+{% load static %}
+{% block content %}
+
+<div>
+    <div class="row">
+        <div class="row col-lg-12 col-md-12 col-sm-12">
+            <form action="{% url 'model_catalog:model_catalog_home' %}" method="POST" enctype="multipart/form-data" class="row col-lg-8 col-md-8 col-sm-8"> 
+                {% csrf_token %}
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                    <label for="inputState">Upload Model Catalog(xls, xlsx):</label>
+                    <input type="file" name="upload_file" id="upload_file" required="True" class="form-control">
+                    {% if error %}
+                        <span class="error">{{ message }}</span>
+                    {% endif %}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 m-t-32">
+                    <button class="btn btn-success">
+                        <i class="fa fa-upload" aria-hidden="true"></i>&nbsp;
+                        Upload
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br /><br />
+    <div class="row">
+        <div class="row col-lg-12 col-md-12 col-sm-12">
+            <form action="{% url 'model_catalog:model_catalog_home' %}" method="GET" class="row col-lg-6 col-md-6 col-sm-6"> 
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                    <label for="inputState">Select Category</label>
+                    <select id="inputState" class="form-control" name="category">
+                        <option value=""
+                            {% if selected_category == "" %}selected="selected"{% endif %}>
+                            Select Category
+                        </option>
+                        {% for category in categories %}
+                            <option value="{{category.id}}"
+                                {% if category == selected_category %}selected="selected"{% endif %}>
+                                {{ category.id }} - {{ category.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 m-t-32">
+                    <button class="btn btn-success">
+                        Submit
+                    </button>
+                </div>
+            </form>
+            <div class="col-lg-6 col-md-6 col-sm-6 m-t-32">
+                <a href="{% url 'model_catalog:model_catalog_home' %}">
+                    <button class="btn btn-primary">
+                        Reset
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div>
+                <div class="current_status m-t-15">
+                    <div class="download-button">
+                        <button class="btn btn-info" data-toggle="modal" onclick="openReprocessModal()">
+                            Reprocess
+                        </button>
+                        <a href="{% url 'model_catalog:download_model_catalog' %}?category={{selected_category.id}}">
+                            <button class="btn btn-warning"
+                                {% if not records %} disabled {%endif%}>
+                                <i class="fa fa-download" aria-hidden="true"></i>&nbsp;
+                                Download Model Catalog
+                            </button>
+                        </a>
+                    </div>
+                    <div class="table-width">
+                        <table class="table table-bordered display nowrap" id="model_catalog_table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th class="width-10"></th>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">Title</th>
+                                    <th class="text-center">Category</th>
+                                    <th class="text-center">Aggregation Key</th>
+                                    <th class="text-center">Language</th>
+                                    <th class="text-center">Model Stealth</th>
+                                    <th class="text-center">Model Status</th>
+                                    <th class="text-center">Model Description</th>
+                                    <th class="text-center">Model Description Image URL</th>
+                                    <th class="text-center">Model Image URL</th>
+                                    <th class="text-center">Hero Product</th>
+                                    <th class="text-center">Hero Product Price</th>
+                                    <th class="text-center">Hero Product Market Place</th>
+                                    <th class="text-center">Second Hero Product</th>
+                                    <th class="text-center">Second Hero Product Price</th>
+                                    <th class="text-center">Second Hero Product Market Place</th>
+                                    <th class="text-center">Product Review Count</th>
+                                    <th class="text-center">Product Review Score</th>
+                                    <th class="text-center">Review URL</th>
+                                    <th class="text-center">Recommendation Score</th>
+                                    {% for column in columns %}
+                                        <th class="text-center">{{column}}</th>
+                                    {% endfor %}
+                                    <th class="text-center">Updated At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if records %}
+                                    {% for record in records %}
+                                        <tr>
+                                            <td class="details-control width-10"></td>
+                                            <td class="text-center">{{record.id}}</td>
+                                            <td class="text-center">{{record.title}}</td>
+                                            <td class="text-center">{{record.my_roga_category.name}}</td>
+                                            <td class="text-center">{{record.aggregation_key}}</td>
+                                            <td class="text-center">{{record.language}}</td>
+                                            <td class="text-center">{{record.model_stealth}}</td>
+                                            <td class="text-center">{{record.model_status}}</td>
+                                            <td class="text-center">{{record.description}}</td>
+                                            <td class="text-center">{{record.description_image_url}}</td>
+                                            <td class="text-center">{{record.image_url}}</td>
+                                            <td class="text-center">{{record.hero_product}}</td>
+                                            <td class="text-center">{{record.hero_product_price}}</td>
+                                            <td class="text-center">{{record.hero_product_market_place}}</td>
+                                            <td class="text-center">{{record.second_hero_product}}</td>
+                                            <td class="text-center">{{record.second_hero_product_price}}</td>
+                                            <td class="text-center">{{record.second_hero_product_market_place}}</td>
+                                            <td class="text-center">{{record.product_review_count}}</td>
+                                            <td class="text-center">{{record.product_review_score}}</td>
+                                            <td class="text-center">{{record.review_url}}</td>
+                                            <td class="text-center">{{record.recommendation_score}}</td>
+                                            {% for column in columns %}
+                                                <td class="text-center">{{record|dict_with_space:column}}</td>
+                                            {% endfor %}
+                                            <td class="text-center">{{record.updated_at}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="23">No Data Available</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Reprocess Model -->
+            <div class="modal fade" id="reprocessModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Confirm Reprocess Changes</h5>
+                                <button type="button" class="close" onclick="closeReprocessModal()" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="reprocess_selected_category" value="{{selected_category.id}}"/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeReprocessModal()">Close</button>
+                            <button type="button" class="btn btn-primary">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
